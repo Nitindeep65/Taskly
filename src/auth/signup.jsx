@@ -20,7 +20,7 @@ function Signup() {
     setLoading(true);
 
     try {
-      const response = await axios.post('http://localhost:5001/auth/signup', {
+      const response = await axios.post('https://taskly-backend-iutv.onrender.com//auth/signup', {
         name,
         email,
         password

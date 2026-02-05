@@ -15,7 +15,7 @@ function Login() {
     setLoading(true);
     
     try {
-      const res = await axios.post("http://localhost:5001/auth/login", {
+      const res = await axios.post("https://taskly-backend-iutv.onrender.com//auth/login", {
         email,
         password
       });

@@ -45,7 +45,6 @@ function DraggableTask({ todo, children }) {
 function Dashboard() {
   const [todos, setTodos] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
 
   const [newTodo, setNewTodo] = useState("");
   const [newTodoStatus, setNewTodoStatus] = useState("ONGOING");
@@ -72,7 +71,7 @@ function Dashboard() {
         }
 
         const res = await axios.get(
-          "http://localhost:5001/todo/getTodos",
+          "https://taskly-backend-iutv.onrender.com/todo/getTodos",
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -88,7 +87,7 @@ function Dashboard() {
           if (err.response?.status === 401) {
             navigate("/login");
           } else {
-            setError("Failed to load tasks");
+            // setError("Failed to load tasks");
           }
         }
       } finally {
@@ -111,7 +110,7 @@ function Dashboard() {
     setAddingTodo(true);
     try {
       const res = await axios.post(
-        "http://localhost:5001/todo/addTodo",
+        "https://taskly-backend-iutv.onrender.com//todo/addTodo",
         {
           title: newTodo,
           status: newTodoStatus,
@@ -127,7 +126,7 @@ function Dashboard() {
       setNewTodo("");
       setNewTodoStatus("ONGOING");
     } catch {
-      setError("Failed to add task");
+      // setError("Failed to add task");
     } finally {
       setAddingTodo(false);
     }
@@ -136,7 +135,7 @@ function Dashboard() {
   const updateTodoStatus = async (id, status) => {
     try {
       await axios.put(
-        `http://localhost:5001/todo/updateTodo/${id}`,
+        `https://taskly-backend-iutv.onrender.com//todo/updateTodo/${id}`,
         { status },
         {
           headers: {
@@ -151,7 +150,7 @@ function Dashboard() {
         )
       );
     } catch {
-      setError("Failed to update task");
+      // setError("Failed to update task");
     }
   };
 
@@ -169,7 +168,7 @@ function Dashboard() {
   const handleDeleteTodo = async (id) => {
     try {
       await axios.delete(
-        `http://localhost:5001/todo/deleteTodo/${id}`,
+        `https://taskly-backend-iutv.onrender.com//todo/deleteTodo/${id}`,
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -179,7 +178,7 @@ function Dashboard() {
 
       setTodos((prev) => prev.filter((t) => t.id !== id));
     } catch {
-      setError("Failed to delete task");
+      // setError("Failed to delete task");
     }
   };
 
