@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { DndContext, useDroppable, useDraggable , PointerSensor ,useSensor ,useSensors } from "@dnd-kit/core";
+import { DndContext, useDroppable, useDraggable , PointerSensor, TouchSensor, KeyboardSensor, useSensor, useSensors } from "@dnd-kit/core";
 import { CSS } from "@dnd-kit/utilities";
 
 
@@ -52,12 +52,19 @@ function Dashboard() {
 
   const navigate = useNavigate();
   const sensors = useSensors(
-  useSensor(PointerSensor, {
-    activationConstraint: {
-      distance: 5, 
-    },
-  })
-);
+    useSensor(PointerSensor, {
+      activationConstraint: {
+        distance: 5, 
+      },
+    }),
+    useSensor(TouchSensor, {
+      activationConstraint: {
+        delay: 200,
+        tolerance: 5,
+      },
+    }),
+    useSensor(KeyboardSensor)
+  );
 
   useEffect(() => {
     let isMounted = true;
