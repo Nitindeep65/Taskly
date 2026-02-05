@@ -5,12 +5,13 @@ import Index from './components'
 import Signup from './auth/signup'
 import Login from './auth/login'
 import Dashboard from './components/dashboard'
+import Landing from './components/Landing'
 
 function App() {
   return (
      <BrowserRouter>
      <Routes>
-      <Route path='/' element={<Signup/>}/>
+      <Route path='/' element={<Landing/>}/>
       <Route path='/index' element={<Index/>}/>
       <Route path='/login' element={<Login/>}/>
       <Route path='/signup' element={<Signup/>}/>
@@ -19,5 +20,6 @@ function App() {
      </BrowserRouter>
   )
 }
+
 
 export default App
