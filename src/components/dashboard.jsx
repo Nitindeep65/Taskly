@@ -34,6 +34,7 @@ function DroppableColumn({ id, children, title, count, color }) {
         } ${
           isOver ? (isDarkMode ? "bg-blue-900/20 ring-2 ring-blue-400" : "bg-blue-50 ring-2 ring-blue-200") : ""
         }`}
+        style={{touchAction: 'none'}}
       >
         {children}
       </div>
@@ -48,6 +49,7 @@ function DraggableTask({ todo, children }) {
   const style = {
     transform: CSS.Translate.toString(transform),
     zIndex: isDragging ? 1000 : 1,
+    touchAction: 'none',
   };
 
   return (
@@ -56,10 +58,11 @@ function DraggableTask({ todo, children }) {
         <div
           {...listeners}
           {...attributes}
-          className="absolute -top-2 -right-2 w-6 h-6 bg-gray-200 hover:bg-gray-300 rounded-full flex items-center justify-center cursor-grab active:cursor-grabbing opacity-0 group-hover:opacity-100 transition-opacity duration-200 touch-manipulation"
+          className="absolute -top-1 -right-1 w-8 h-8 bg-gray-300 hover:bg-gray-400 dark:bg-gray-600 dark:hover:bg-gray-500 rounded-full flex items-center justify-center cursor-grab active:cursor-grabbing opacity-80 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-200 z-10"
           title="Drag to move"
+          style={{touchAction: 'none'}}
         >
-          <svg className="w-3 h-3 text-gray-600" fill="currentColor" viewBox="0 0 6 10">
+          <svg className="w-4 h-4 text-gray-600 dark:text-gray-300" fill="currentColor" viewBox="0 0 6 10">
             <circle cx="1" cy="1" r="1"/>
             <circle cx="1" cy="5" r="1"/>
             <circle cx="1" cy="9" r="1"/>
@@ -92,8 +95,8 @@ function Dashboard() {
     }),
     useSensor(TouchSensor, {
       activationConstraint: {
-        delay: 200,
-        tolerance: 5,
+        delay: 100,
+        tolerance: 8,
       },
     }),
     useSensor(KeyboardSensor, {
@@ -522,11 +525,42 @@ function Dashboard() {
           
           <DragOverlay>
             {activeId ? (
-              <DraggableTask 
-                key={activeId}
-                id={activeId}
-                todo={todos.find(todo => todo.id === activeId)}
-              />
+              (() => {
+                const draggedTodo = todos.find(todo => todo.id === activeId);
+                if (!draggedTodo) return null;
+                
+                return (
+                  <div className={`p-4 rounded-lg shadow-lg border-l-4 ${
+                    isDarkMode ? 'bg-gray-800' : 'bg-white'
+                  } ${
+                    draggedTodo.status === "URGENT" ? "border-red-500" : 
+                    draggedTodo.status === "ONGOING" ? "border-yellow-500" : 
+                    "border-green-500"
+                  } opacity-90 transform rotate-2 scale-105`}>
+                    <div className="flex items-start gap-3">
+                      <div className="flex-1 min-w-0">
+                        <p className={`text-sm md:text-base font-medium break-words ${
+                          draggedTodo.status === "COMPLETED"
+                            ? (isDarkMode ? "line-through text-gray-400" : "line-through text-gray-500")
+                            : (isDarkMode ? "text-gray-100" : "text-gray-800")
+                        }`}>
+                          {draggedTodo.title}
+                        </p>
+                        
+                        <div className="flex items-center justify-between mt-2">
+                          <span className={`inline-flex items-center px-2 py-1 text-xs font-medium rounded-full ${
+                            draggedTodo.status === "URGENT" ? "bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400" :
+                            draggedTodo.status === "ONGOING" ? "bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400" :
+                            "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400"
+                          }`}>
+                            {draggedTodo.status.toLowerCase()}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })()
             ) : null}
           </DragOverlay>
         </DndContext>
