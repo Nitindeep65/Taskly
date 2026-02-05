@@ -14,7 +14,7 @@ function DroppableColumn({ id, children, title, count, color }) {
     <div className="flex flex-col h-full">
       <div className={`flex items-center justify-between p-4 rounded-t-xl border-b ${
         isDarkMode 
-          ? 'bg-gray-800 border-gray-700' 
+          ? 'bg-black border-gray-800' 
           : 'bg-white border-gray-100'
       } ${color}`}>
         <div className="flex items-center gap-3">
@@ -30,9 +30,9 @@ function DroppableColumn({ id, children, title, count, color }) {
       <div
         ref={setNodeRef}
         className={`flex-1 p-4 rounded-b-xl min-h-[200px] md:min-h-[300px] transition-all duration-200 ${
-          isDarkMode ? 'bg-gray-800/50' : 'bg-gray-50'
+          isDarkMode ? 'bg-gray-900/80' : 'bg-gray-50'
         } ${
-          isOver ? (isDarkMode ? "bg-blue-900/20 ring-2 ring-blue-400" : "bg-blue-50 ring-2 ring-blue-200") : ""
+          isOver ? (isDarkMode ? "bg-blue-950/40 ring-2 ring-blue-500" : "bg-blue-50 ring-2 ring-blue-200") : ""
         }`}
         style={{touchAction: 'none'}}
       >
@@ -58,11 +58,11 @@ function DraggableTask({ todo, children }) {
         <div
           {...listeners}
           {...attributes}
-          className="absolute -top-1 -right-1 w-8 h-8 bg-gray-300 hover:bg-gray-400 dark:bg-gray-600 dark:hover:bg-gray-500 rounded-full flex items-center justify-center cursor-grab active:cursor-grabbing opacity-80 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-200 z-10"
+          className="absolute -top-1 -right-1 w-8 h-8 bg-gray-300 hover:bg-gray-400 dark:bg-gray-800 dark:hover:bg-gray-700 rounded-full flex items-center justify-center cursor-grab active:cursor-grabbing opacity-80 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-200 z-10"
           title="Drag to move"
           style={{touchAction: 'none'}}
         >
-          <svg className="w-4 h-4 text-gray-600 dark:text-gray-300" fill="currentColor" viewBox="0 0 6 10">
+          <svg className="w-4 h-4 text-gray-600 dark:text-gray-400" fill="currentColor" viewBox="0 0 6 10">
             <circle cx="1" cy="1" r="1"/>
             <circle cx="1" cy="5" r="1"/>
             <circle cx="1" cy="9" r="1"/>
@@ -263,7 +263,7 @@ function Dashboard() {
       {tasks.length === 0 ? (
         <div className="flex flex-col items-center justify-center py-8 text-center">
           <div className={`w-16 h-16 rounded-full flex items-center justify-center mb-3 ${
-            isDarkMode ? 'bg-gray-700' : 'bg-gray-100'
+            isDarkMode ? 'bg-gray-800' : 'bg-gray-100'
           }`}>
             <svg className={`w-8 h-8 ${isDarkMode ? 'text-gray-400' : 'text-gray-400'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
@@ -276,7 +276,7 @@ function Dashboard() {
           {tasks.map((todo) => (
             <DraggableTask key={todo.id} todo={todo}>
               <div className={`group p-4 rounded-lg shadow-sm border-l-4 hover:shadow-md transition-all duration-200 ${
-                isDarkMode ? 'bg-gray-800 hover:bg-gray-750' : 'bg-white'
+                isDarkMode ? 'bg-black hover:bg-gray-900' : 'bg-white'
               } ${
                 todo.status === "URGENT" ? "border-red-500" : 
                 todo.status === "ONGOING" ? "border-yellow-500" : 
@@ -302,8 +302,8 @@ function Dashboard() {
                   <div className="flex-1 min-w-0">
                     <p className={`text-sm md:text-base font-medium break-words ${
                       todo.status === "COMPLETED"
-                        ? (isDarkMode ? "line-through text-gray-400" : "line-through text-gray-500")
-                        : (isDarkMode ? "text-gray-100" : "text-gray-800")
+                        ? (isDarkMode ? "line-through text-gray-500" : "line-through text-gray-500")
+                        : (isDarkMode ? "text-gray-50" : "text-gray-800")
                     }`}>
                       {todo.title}
                     </p>
@@ -345,12 +345,12 @@ function Dashboard() {
   return (
     <div className={`min-h-screen transition-colors duration-300 ${
       isDarkMode 
-        ? 'bg-gradient-to-br from-gray-900 to-gray-800' 
+        ? 'bg-gradient-to-br from-black to-gray-950' 
         : 'bg-gradient-to-br from-gray-50 to-gray-100'
     }`}>
       <div className={`sticky top-0 z-10 border-b transition-colors duration-300 ${
         isDarkMode 
-          ? 'bg-gray-800/80 backdrop-blur-sm border-gray-700' 
+          ? 'bg-black/90 backdrop-blur-sm border-gray-800' 
           : 'bg-white/80 backdrop-blur-sm border-gray-200'
       }`}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -531,7 +531,7 @@ function Dashboard() {
                 
                 return (
                   <div className={`p-4 rounded-lg shadow-lg border-l-4 ${
-                    isDarkMode ? 'bg-gray-800' : 'bg-white'
+                    isDarkMode ? 'bg-black' : 'bg-white'
                   } ${
                     draggedTodo.status === "URGENT" ? "border-red-500" : 
                     draggedTodo.status === "ONGOING" ? "border-yellow-500" : 
@@ -541,8 +541,8 @@ function Dashboard() {
                       <div className="flex-1 min-w-0">
                         <p className={`text-sm md:text-base font-medium break-words ${
                           draggedTodo.status === "COMPLETED"
-                            ? (isDarkMode ? "line-through text-gray-400" : "line-through text-gray-500")
-                            : (isDarkMode ? "text-gray-100" : "text-gray-800")
+                            ? (isDarkMode ? "line-through text-gray-500" : "line-through text-gray-500")
+                            : (isDarkMode ? "text-gray-50" : "text-gray-800")
                         }`}>
                           {draggedTodo.title}
                         </p>
