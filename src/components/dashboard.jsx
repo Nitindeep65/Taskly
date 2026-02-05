@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { DndContext, useDroppable, useDraggable , PointerSensor, TouchSensor, KeyboardSensor, useSensor, useSensors } from "@dnd-kit/core";
+import { DndContext, useDroppable, useDraggable, PointerSensor, TouchSensor, KeyboardSensor, useSensor, useSensors, DragOverlay } from "@dnd-kit/core";
+import { sortableKeyboardCoordinates } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { useTheme } from "../hooks/useTheme";
 
@@ -75,6 +76,7 @@ function DraggableTask({ todo, children }) {
 function Dashboard() {
   const [todos, setTodos] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [activeId, setActiveId] = useState(null);
 
   const [newTodo, setNewTodo] = useState("");
   const [newTodoStatus, setNewTodoStatus] = useState("ONGOING");
@@ -94,7 +96,9 @@ function Dashboard() {
         tolerance: 5,
       },
     }),
-    useSensor(KeyboardSensor)
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
+    })
   );
 
   useEffect(() => {
@@ -181,24 +185,39 @@ function Dashboard() {
           },
         }
       );
-
-      setTodos((prev) =>
-        prev.map((t) =>
-          t.id === id ? { ...t, status } : t
-        )
+      // UI is already updated optimistically, no need to update state here
+    } catch (error) {
+      // If API fails, revert the optimistic update
+      console.error("Failed to update task:", error);
+      // Refetch todos to get the correct state from server
+      setTodos((prev) => 
+        prev.map((t) => t.id === id ? { ...t, status: t.originalStatus || t.status } : t)
       );
-    } catch {
-      // setError("Failed to update task");
+      // Alternatively, you could refetch all todos here
     }
+  };
+
+  const handleDragStart = (event) => {
+    setActiveId(event.active.id);
   };
 
   const handleDragEnd = (event) => {
     const { active, over } = event;
+    setActiveId(null);
+    
     if (!over) return;
 
     const taskId = active.id;
     const newStatus = over.id;
 
+    // Optimistic UI update - Update immediately
+    setTodos((prev) =>
+      prev.map((t) =>
+        t.id === taskId ? { ...t, status: newStatus } : t
+      )
+    );
+
+    // Call API in background
     updateTodoStatus(taskId, newStatus);
   };
 
@@ -469,6 +488,7 @@ function Dashboard() {
         {/* Kanban Board */}
         <DndContext 
           sensors={sensors}
+          onDragStart={handleDragStart}
           onDragEnd={handleDragEnd}
         >
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -499,6 +519,16 @@ function Dashboard() {
               <TaskSection tasks={completedTodos} />
             </DroppableColumn>
           </div>
+          
+          <DragOverlay>
+            {activeId ? (
+              <DraggableTask 
+                key={activeId}
+                id={activeId}
+                todo={todos.find(todo => todo.id === activeId)}
+              />
+            ) : null}
+          </DragOverlay>
         </DndContext>
       </div>
     </div>
