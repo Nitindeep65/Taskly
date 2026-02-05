@@ -17,7 +17,7 @@ function Todo() {
   const fetchTodo = useCallback(async () => {
     if (!token) return;
     try {
-      const { data } = await axios.get("http://localhost:5001/todo/getTodos", {
+      const { data } = await axios.get("https://taskly-backend-iutv.onrender.com/todo/getTodos", {
         headers: { Authorization: `Bearer ${token}` }
       });
       setTodo(data);
@@ -37,7 +37,7 @@ function Todo() {
     setError('');
 
     try {
-      const { data } = await axios.post("https://taskly-backend-iutv.onrender.com//todo/createTodo", {
+      const { data } = await axios.post("https://taskly-backend-iutv.onrender.com/todo/createTodo", {
         name: name.trim(),
         title: title.trim(),
         description: description.trim() || undefined,
@@ -60,7 +60,7 @@ function Todo() {
 
   const deleteTodo = async (id) => {
     try {
-      await axios.delete(`https://taskly-backend-iutv.onrender.com//todo/deleteTodo/${id}`, {
+      await axios.delete(`https://taskly-backend-iutv.onrender.com/todo/deleteTodo/${id}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setTodo(todo.filter(t => t.id !== id));

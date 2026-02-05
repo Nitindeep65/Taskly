@@ -110,7 +110,7 @@ function Dashboard() {
     setAddingTodo(true);
     try {
       const res = await axios.post(
-        "https://taskly-backend-iutv.onrender.com//todo/addTodo",
+        "https://taskly-backend-iutv.onrender.com/todo/addTodo",
         {
           title: newTodo,
           status: newTodoStatus,
@@ -135,7 +135,7 @@ function Dashboard() {
   const updateTodoStatus = async (id, status) => {
     try {
       await axios.put(
-        `https://taskly-backend-iutv.onrender.com//todo/updateTodo/${id}`,
+        `https://taskly-backend-iutv.onrender.com/todo/updateTodo/${id}`,
         { status },
         {
           headers: {
@@ -168,7 +168,7 @@ function Dashboard() {
   const handleDeleteTodo = async (id) => {
     try {
       await axios.delete(
-        `https://taskly-backend-iutv.onrender.com//todo/deleteTodo/${id}`,
+        `https://taskly-backend-iutv.onrender.com/todo/deleteTodo/${id}`,
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
