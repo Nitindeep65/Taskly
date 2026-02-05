@@ -1,16 +1,26 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useTheme } from '../hooks/useTheme';
 
 function Landing() {
   const navigate = useNavigate();
+  const { isDarkMode, toggleTheme } = useTheme();
 
   const goToLogin = () => navigate('/login');
   const goToSignup = () => navigate('/signup');
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50">
+    <div className={`min-h-screen transition-colors duration-300 ${
+      isDarkMode 
+        ? 'bg-gradient-to-br from-gray-900 to-gray-800' 
+        : 'bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50'
+    }`}>
       {/* Navigation Header */}
-      <nav className="bg-white/80 backdrop-blur-sm border-b border-gray-200 sticky top-0 z-50">
+      <nav className={`border-b sticky top-0 z-50 transition-colors duration-300 ${
+        isDarkMode 
+          ? 'bg-gray-800/80 backdrop-blur-sm border-gray-700' 
+          : 'bg-white/80 backdrop-blur-sm border-gray-200'
+      }`}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center py-4">
             <div className="flex items-center gap-3">
@@ -23,16 +33,41 @@ function Landing() {
                 Taskly
               </h1>
             </div>
-            <div className="flex gap-3">
+            <div className="flex items-center gap-3">
+              {/* Dark Mode Toggle */}
+              <button
+                onClick={toggleTheme}
+                className={`p-2 rounded-lg transition-all duration-200 ${
+                  isDarkMode 
+                    ? 'bg-gray-700 hover:bg-gray-600 text-yellow-400' 
+                    : 'bg-gray-200 hover:bg-gray-300 text-gray-700'
+                }`}
+                title={isDarkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
+              >
+                {isDarkMode ? (
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+                  </svg>
+                ) : (
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+                  </svg>
+                )}
+              </button>
+              
               <button
                 onClick={goToLogin}
-                className="px-4 py-2 text-gray-700 hover:text-blue-600 font-medium transition-colors duration-200"
+                className={`px-4 py-2 font-medium transition-colors duration-200 ${
+                  isDarkMode 
+                    ? 'text-gray-300 hover:text-blue-400' 
+                    : 'text-gray-700 hover:text-blue-600'
+                }`}
               >
                 Sign In
               </button>
               <button
                 onClick={goToSignup}
-                className="px-6 py-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg font-medium hover:from-blue-700 hover:to-purple-700 transition-all duration-200 shadow-lg hover:shadow-xl"
+                className="px-6 py-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg font-medium hover:from-blue-700 hover:to-purple-700 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
               >
                 Get Started
               </button>
@@ -47,13 +82,17 @@ function Landing() {
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             {/* Left Content */}
             <div className="text-center lg:text-left">
-              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 leading-tight mb-6">
+              <h1 className={`text-4xl md:text-5xl lg:text-6xl font-bold leading-tight mb-6 ${
+                isDarkMode ? 'text-gray-100' : 'text-gray-900'
+              }`}>
                 Organize Your
                 <span className="block bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
                   Tasks Effortlessly
                 </span>
               </h1>
-              <p className="text-lg md:text-xl text-gray-600 mb-8 leading-relaxed">
+              <p className={`text-lg md:text-xl mb-8 leading-relaxed ${
+                isDarkMode ? 'text-gray-300' : 'text-gray-600'
+              }`}>
                 Stay productive with our intuitive kanban-style task management. 
                 Drag, drop, and conquer your daily goals with ease.
               </p>
@@ -75,16 +114,24 @@ function Landing() {
 
             {/* Right Visual */}
             <div className="relative">
-              <div className="bg-white rounded-2xl shadow-2xl p-6 transform rotate-2 hover:rotate-0 transition-transform duration-500">
+              <div className={`rounded-2xl shadow-2xl p-6 transform rotate-2 hover:rotate-0 transition-transform duration-500 ${
+                isDarkMode ? 'bg-gray-800' : 'bg-white'
+              }`}>
                 <div className="grid grid-cols-3 gap-4">
                   {/* Urgent Column */}
                   <div className="space-y-3">
                     <div className="flex items-center gap-2 mb-3">
                       <div className="w-3 h-3 bg-red-500 rounded-full"></div>
-                      <span className="font-semibold text-sm text-gray-800">Urgent</span>
+                      <span className={`font-semibold text-sm ${
+                        isDarkMode ? 'text-gray-200' : 'text-gray-800'
+                      }`}>Urgent</span>
                     </div>
-                    <div className="bg-red-50 border-l-4 border-red-500 p-3 rounded-lg">
-                      <p className="text-sm font-medium text-gray-800">Fix critical bug</p>
+                    <div className={`border-l-4 border-red-500 p-3 rounded-lg ${
+                      isDarkMode ? 'bg-red-900/20' : 'bg-red-50'
+                    }`}>
+                      <p className={`text-sm font-medium ${
+                        isDarkMode ? 'text-gray-200' : 'text-gray-800'
+                      }`}>Fix critical bug</p>
                       <span className="text-xs text-red-700 bg-red-100 px-2 py-1 rounded-full mt-2 inline-block">urgent</span>
                     </div>
                     <div className="bg-red-50 border-l-4 border-red-500 p-3 rounded-lg">

@@ -6,20 +6,24 @@ import Signup from './auth/signup'
 import Login from './auth/login'
 import Dashboard from './components/dashboard'
 import Landing from './components/Landing'
+import { ThemeProvider } from './context/ThemeContext'
 
 function App() {
   return (
-     <BrowserRouter>
-     <Routes>
-      <Route path='/' element={<Landing/>}/>
-      <Route path='/index' element={<Index/>}/>
-      <Route path='/login' element={<Login/>}/>
-      <Route path='/signup' element={<Signup/>}/>
-      <Route path='/dashboard' element={<Dashboard/>}/>
-     </Routes>
-     </BrowserRouter>
+    <ThemeProvider>
+      <BrowserRouter>
+        <Routes>
+          <Route path='/' element={<Landing/>}/>
+          <Route path='/index' element={<Index/>}/>
+          <Route path='/login' element={<Login/>}/>
+          <Route path='/signup' element={<Signup/>}/>
+          <Route path='/dashboard' element={<Dashboard/>}/>
+        </Routes>
+      </BrowserRouter>
+    </ThemeProvider>
   )
 }
+
 
 
 export default App

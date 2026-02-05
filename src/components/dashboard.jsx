@@ -3,25 +3,35 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { DndContext, useDroppable, useDraggable , PointerSensor, TouchSensor, KeyboardSensor, useSensor, useSensors } from "@dnd-kit/core";
 import { CSS } from "@dnd-kit/utilities";
+import { useTheme } from "../hooks/useTheme";
 
 function DroppableColumn({ id, children, title, count, color }) {
   const { setNodeRef, isOver } = useDroppable({ id });
+  const { isDarkMode } = useTheme();
 
   return (
     <div className="flex flex-col h-full">
-      <div className={`flex items-center justify-between p-4 bg-white rounded-t-xl border-b border-gray-100 ${color}`}>
+      <div className={`flex items-center justify-between p-4 rounded-t-xl border-b ${
+        isDarkMode 
+          ? 'bg-gray-800 border-gray-700' 
+          : 'bg-white border-gray-100'
+      } ${color}`}>
         <div className="flex items-center gap-3">
           <div className={`w-3 h-3 rounded-full ${color.replace('border-l-4', 'bg')}`}></div>
-          <h3 className="font-semibold text-gray-800 text-sm md:text-base">{title}</h3>
+          <h3 className={`font-semibold text-sm md:text-base ${
+            isDarkMode ? 'text-gray-100' : 'text-gray-800'
+          }`}>{title}</h3>
         </div>
-        <span className={`px-2 py-1 text-xs font-medium rounded-full ${color.includes('red') ? 'bg-red-100 text-red-700' : color.includes('yellow') ? 'bg-yellow-100 text-yellow-700' : 'bg-green-100 text-green-700'}`}>
+        <span className={`px-2 py-1 text-xs font-medium rounded-full ${color.includes('red') ? 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400' : color.includes('yellow') ? 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400' : 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400'}`}>
           {count}
         </span>
       </div>
       <div
         ref={setNodeRef}
-        className={`flex-1 p-4 bg-gray-50 rounded-b-xl min-h-[200px] md:min-h-[300px] transition-all duration-200 ${
-          isOver ? "bg-blue-50 ring-2 ring-blue-200" : ""
+        className={`flex-1 p-4 rounded-b-xl min-h-[200px] md:min-h-[300px] transition-all duration-200 ${
+          isDarkMode ? 'bg-gray-800/50' : 'bg-gray-50'
+        } ${
+          isOver ? (isDarkMode ? "bg-blue-900/20 ring-2 ring-blue-400" : "bg-blue-50 ring-2 ring-blue-200") : ""
         }`}
       >
         {children}
@@ -71,6 +81,7 @@ function Dashboard() {
   const [addingTodo, setAddingTodo] = useState(false);
 
   const navigate = useNavigate();
+  const { isDarkMode, toggleTheme } = useTheme();
   const sensors = useSensors(
     useSensor(PointerSensor, {
       activationConstraint: {
@@ -229,18 +240,22 @@ function Dashboard() {
     <div className="space-y-3">
       {tasks.length === 0 ? (
         <div className="flex flex-col items-center justify-center py-8 text-center">
-          <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mb-3">
-            <svg className="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <div className={`w-16 h-16 rounded-full flex items-center justify-center mb-3 ${
+            isDarkMode ? 'bg-gray-700' : 'bg-gray-100'
+          }`}>
+            <svg className={`w-8 h-8 ${isDarkMode ? 'text-gray-400' : 'text-gray-400'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
             </svg>
           </div>
-          <p className="text-gray-500 text-sm">No tasks yet</p>
+          <p className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>No tasks yet</p>
         </div>
       ) : (
         <div className="space-y-3">
           {tasks.map((todo) => (
             <DraggableTask key={todo.id} todo={todo}>
-              <div className={`group p-4 bg-white rounded-lg shadow-sm border-l-4 hover:shadow-md transition-all duration-200 ${
+              <div className={`group p-4 rounded-lg shadow-sm border-l-4 hover:shadow-md transition-all duration-200 ${
+                isDarkMode ? 'bg-gray-800 hover:bg-gray-750' : 'bg-white'
+              } ${
                 todo.status === "URGENT" ? "border-red-500" : 
                 todo.status === "ONGOING" ? "border-yellow-500" : 
                 "border-green-500"
@@ -249,7 +264,11 @@ function Dashboard() {
                   {todo.status !== "COMPLETED" && (
                     <button
                       onClick={() => updateTodoStatus(todo.id, "COMPLETED")}
-                      className="mt-0.5 w-5 h-5 border-2 border-gray-400 rounded hover:border-green-500 hover:bg-green-50 transition-colors duration-200 flex-shrink-0"
+                      className={`mt-0.5 w-5 h-5 border-2 rounded hover:border-green-500 transition-colors duration-200 flex-shrink-0 ${
+                        isDarkMode 
+                          ? 'border-gray-500 hover:bg-green-900/20' 
+                          : 'border-gray-400 hover:bg-green-50'
+                      }`}
                       title="Mark as completed"
                     >
                       <svg className="w-3 h-3 text-green-600 opacity-0 hover:opacity-100" fill="currentColor" viewBox="0 0 20 20">
@@ -261,24 +280,28 @@ function Dashboard() {
                   <div className="flex-1 min-w-0">
                     <p className={`text-sm md:text-base font-medium break-words ${
                       todo.status === "COMPLETED"
-                        ? "line-through text-gray-500"
-                        : "text-gray-800"
+                        ? (isDarkMode ? "line-through text-gray-400" : "line-through text-gray-500")
+                        : (isDarkMode ? "text-gray-100" : "text-gray-800")
                     }`}>
                       {todo.title}
                     </p>
                     
                     <div className="flex items-center justify-between mt-2">
                       <span className={`inline-flex items-center px-2 py-1 text-xs font-medium rounded-full ${
-                        todo.status === "URGENT" ? "bg-red-100 text-red-700" :
-                        todo.status === "ONGOING" ? "bg-yellow-100 text-yellow-700" :
-                        "bg-green-100 text-green-700"
+                        todo.status === "URGENT" ? "bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400" :
+                        todo.status === "ONGOING" ? "bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400" :
+                        "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400"
                       }`}>
                         {todo.status.toLowerCase()}
                       </span>
                       
                       <button
                         onClick={() => handleDeleteTodo(todo.id)}
-                        className="opacity-0 group-hover:opacity-100 p-1 text-gray-400 hover:text-red-500 rounded transition-all duration-200"
+                        className={`opacity-0 group-hover:opacity-100 p-1 rounded transition-all duration-200 ${
+                          isDarkMode 
+                            ? 'text-gray-400 hover:text-red-400' 
+                            : 'text-gray-400 hover:text-red-500'
+                        }`}
                         title="Delete task"
                       >
                         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -298,8 +321,16 @@ function Dashboard() {
 
   /* ===================== RENDER ===================== */
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
-      <div className="sticky top-0 z-10 bg-white/80 backdrop-blur-sm border-b border-gray-200">
+    <div className={`min-h-screen transition-colors duration-300 ${
+      isDarkMode 
+        ? 'bg-gradient-to-br from-gray-900 to-gray-800' 
+        : 'bg-gradient-to-br from-gray-50 to-gray-100'
+    }`}>
+      <div className={`sticky top-0 z-10 border-b transition-colors duration-300 ${
+        isDarkMode 
+          ? 'bg-gray-800/80 backdrop-blur-sm border-gray-700' 
+          : 'bg-white/80 backdrop-blur-sm border-gray-200'
+      }`}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between py-4">
             <div className="flex items-center gap-4">
@@ -309,19 +340,68 @@ function Dashboard() {
                 </svg>
               </div>
               <div>
-                <h1 className="text-xl md:text-2xl font-bold text-gray-900">Taskly</h1>
-                <p className="text-sm text-gray-500">{todos.length} total tasks</p>
+                <h1 className={`text-xl md:text-2xl font-bold ${
+                  isDarkMode ? 'text-gray-100' : 'text-gray-900'
+                }`}>Taskly</h1>
+                <p className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>
+                  {todos.length} total tasks
+                </p>
               </div>
             </div>
-            <button
-              onClick={handleLogout}
-              className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
-            >
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
-              </svg>
-              <span className="hidden sm:inline">Logout</span>
-            </button>
+            
+            <div className="flex items-center gap-3">
+              {/* Advanced Task Creator Button */}
+              <button
+                onClick={() => navigate('/index')}
+                className={`inline-flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-lg transition-all duration-200 transform hover:-translate-y-0.5 ${
+                  isDarkMode 
+                    ? 'bg-indigo-600 hover:bg-indigo-700 text-white' 
+                    : 'bg-indigo-600 hover:bg-indigo-700 text-white'
+                }`}
+                title="Advanced Task Creator"
+              >
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                </svg>
+                <span className="hidden sm:inline">Advanced</span>
+              </button>
+
+              {/* Dark Mode Toggle */}
+              <button
+                onClick={toggleTheme}
+                className={`p-2 rounded-lg transition-all duration-200 transform hover:-translate-y-0.5 ${
+                  isDarkMode 
+                    ? 'bg-gray-700 hover:bg-gray-600 text-yellow-400' 
+                    : 'bg-gray-200 hover:bg-gray-300 text-gray-700'
+                }`}
+                title={isDarkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
+              >
+                {isDarkMode ? (
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+                  </svg>
+                ) : (
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+                  </svg>
+                )}
+              </button>
+
+              {/* Logout Button */}
+              <button
+                onClick={handleLogout}
+                className={`inline-flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-lg border-2 transition-all duration-200 transform hover:-translate-y-0.5 ${
+                  isDarkMode 
+                    ? 'text-gray-300 bg-gray-800 border-gray-600 hover:border-red-500 hover:text-red-400' 
+                    : 'text-gray-700 bg-white border-gray-300 hover:border-red-500 hover:text-red-600'
+                }`}
+              >
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                </svg>
+                <span className="hidden sm:inline">Logout</span>
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -331,7 +411,11 @@ function Dashboard() {
         <div className="mb-6">
           <form
             onSubmit={handleAddTodo}
-            className="bg-white rounded-xl shadow-sm border border-gray-200 p-4 md:p-6"
+            className={`rounded-xl shadow-sm border p-4 md:p-6 transition-colors duration-300 ${
+              isDarkMode 
+                ? 'bg-gray-800 border-gray-700' 
+                : 'bg-white border-gray-200'
+            }`}
           >
             <div className="flex flex-col md:flex-row gap-3">
               <div className="flex-1">
@@ -339,21 +423,29 @@ function Dashboard() {
                   value={newTodo}
                   onChange={(e) => setNewTodo(e.target.value)}
                   placeholder="What needs to be done?"
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors duration-200"
+                  className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors duration-200 ${
+                    isDarkMode 
+                      ? 'border-gray-600 bg-gray-700 text-gray-100 placeholder-gray-400' 
+                      : 'border-gray-300 bg-white text-gray-900 placeholder-gray-500'
+                  }`}
                 />
               </div>
               <div className="flex gap-3">
                 <select
                   value={newTodoStatus}
                   onChange={(e) => setNewTodoStatus(e.target.value)}
-                  className="px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors duration-200"
+                  className={`px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors duration-200 ${
+                    isDarkMode 
+                      ? 'border-gray-600 bg-gray-700 text-gray-100' 
+                      : 'border-gray-300 bg-white text-gray-900'
+                  }`}
                 >
                   <option value="URGENT">🔥 Urgent</option>
                   <option value="ONGOING">⏳ Ongoing</option>
                 </select>
                 <button
                   disabled={addingTodo || !newTodo.trim()}
-                  className="px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg font-medium hover:from-blue-700 hover:to-purple-700 disabled:from-gray-400 disabled:to-gray-400 disabled:cursor-not-allowed focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all duration-200"
+                  className="px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg font-medium hover:from-blue-700 hover:to-purple-700 disabled:from-gray-400 disabled:to-gray-400 disabled:cursor-not-allowed focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all duration-200 transform hover:-translate-y-0.5"
                 >
                   {addingTodo ? (
                     <div className="flex items-center gap-2">
