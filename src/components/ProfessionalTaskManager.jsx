@@ -95,15 +95,6 @@ function ProfessionalTaskManager() {
     return matchesSearch && matchesCategory;
   });
 
-  // Get task statistics
-  const taskStats = {
-    total: todos.length,
-    urgent: todos.filter(t => t.priority === 'urgent').length,
-    high: todos.filter(t => t.priority === 'high').length,
-    ongoing: todos.filter(t => t.priority === 'ongoing').length,
-    low: todos.filter(t => t.priority === 'low').length,
-  };
-
   useEffect(() => {
     fetchTodos();
   }, [fetchTodos]);
@@ -248,73 +239,6 @@ function ProfessionalTaskManager() {
             </button>
           </nav>
         </div>
-
-        {/* Task Statistics - Only show when sidebar is open */}
-        {sidebarOpen && (
-          <div className="p-4 border-t border-gray-200 dark:border-gray-700">
-            <h3 className={`text-sm font-semibold mb-3 ${isDarkMode ? 'text-gray-200' : 'text-gray-800'}`}>
-              Task Overview
-            </h3>
-            <div className="space-y-2">
-              <div className={`flex items-center justify-between p-2 rounded-lg ${
-                isDarkMode ? 'bg-gray-700' : 'bg-gray-100'
-              }`}>
-                <div className="flex items-center gap-2">
-                  <div className="w-3 h-3 bg-blue-500 rounded-full"></div>
-                  <span className={`text-sm ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>Total</span>
-                </div>
-                <span className={`text-sm font-semibold ${isDarkMode ? 'text-gray-200' : 'text-gray-800'}`}>
-                  {taskStats.total}
-                </span>
-              </div>
-              <div className={`flex items-center justify-between p-2 rounded-lg ${
-                isDarkMode ? 'bg-gray-700' : 'bg-gray-100'
-              }`}>
-                <div className="flex items-center gap-2">
-                  <div className="w-3 h-3 bg-red-500 rounded-full"></div>
-                  <span className={`text-sm ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>Urgent</span>
-                </div>
-                <span className={`text-sm font-semibold ${isDarkMode ? 'text-gray-200' : 'text-gray-800'}`}>
-                  {taskStats.urgent}
-                </span>
-              </div>
-              <div className={`flex items-center justify-between p-2 rounded-lg ${
-                isDarkMode ? 'bg-gray-700' : 'bg-gray-100'
-              }`}>
-                <div className="flex items-center gap-2">
-                  <div className="w-3 h-3 bg-orange-500 rounded-full"></div>
-                  <span className={`text-sm ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>High</span>
-                </div>
-                <span className={`text-sm font-semibold ${isDarkMode ? 'text-gray-200' : 'text-gray-800'}`}>
-                  {taskStats.high}
-                </span>
-              </div>
-              <div className={`flex items-center justify-between p-2 rounded-lg ${
-                isDarkMode ? 'bg-gray-700' : 'bg-gray-100'
-              }`}>
-                <div className="flex items-center gap-2">
-                  <div className="w-3 h-3 bg-yellow-500 rounded-full"></div>
-                  <span className={`text-sm ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>Medium</span>
-                </div>
-                <span className={`text-sm font-semibold ${isDarkMode ? 'text-gray-200' : 'text-gray-800'}`}>
-                  {taskStats.ongoing}
-                </span>
-              </div>
-              <div className={`flex items-center justify-between p-2 rounded-lg ${
-                isDarkMode ? 'bg-gray-700' : 'bg-gray-100'
-              }`}>
-                <div className="flex items-center gap-2">
-                  <div className="w-3 h-3 bg-green-500 rounded-full"></div>
-                  <span className={`text-sm ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>Low</span>
-                </div>
-                <span className={`text-sm font-semibold ${isDarkMode ? 'text-gray-200' : 'text-gray-800'}`}>
-                  {taskStats.low}
-                </span>
-              </div>
-            </div>
-          </div>
-        )}
-
         {/* User Profile - Only show when sidebar is open */}
         {sidebarOpen && (
           <div className="p-4 mt-auto border-t border-gray-200 dark:border-gray-700">
