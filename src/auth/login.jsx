@@ -27,7 +27,7 @@ function Login() {
       localStorage.setItem("user", JSON.stringify(res.data.user));
       
       // redirect
-      navigate("/dashboard");
+      navigate("/index");
     } catch (error) {
       setError(error.response?.data?.message || "Login failed. Please try again.");
       console.error(error.response?.data?.message || "Login failed");

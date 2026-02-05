@@ -424,6 +424,13 @@ function Dashboard() {
 
           <div className="flex gap-3">
             <button
+              onClick={() => navigate('/index')}
+              className="px-4 py-2 rounded bg-blue-500 text-white hover:bg-blue-600 transition-colors"
+            >
+              Home
+            </button>
+
+            <button
               onClick={toggleTheme}
               className="px-4 py-2 rounded bg-gray-200 dark:bg-gray-800 dark:text-white"
             >
