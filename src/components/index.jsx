@@ -11,10 +11,16 @@ function Todo() {
   const [priority, setPriority] = useState('ongoing');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [activeTab, setActiveTab] = useState('create');
+  const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState('all');
+  
   const navigate = useNavigate();
   const { isDarkMode, toggleTheme } = useTheme();
 
   const token = localStorage.getItem('token');
+  const user = JSON.parse(localStorage.getItem('user') || '{}');
 
   const fetchTodos = useCallback(async () => {
     if (!token) return;
@@ -23,6 +29,11 @@ function Todo() {
         headers: { Authorization: `Bearer ${token}` }
       });
       setTodos(data);
+    } catch (err) {
+      setError('Failed to fetch tasks');
+      console.error(err);
+    }
+  }, [token]);
     } catch (err) {
       console.error('Failed to fetch todos:', err);
     }
