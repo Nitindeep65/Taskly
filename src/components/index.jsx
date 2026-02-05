@@ -11,16 +11,11 @@ function Todo() {
   const [priority, setPriority] = useState('ongoing');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-  const [activeTab, setActiveTab] = useState('create');
-  const [sidebarOpen, setSidebarOpen] = useState(true);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState('all');
   
   const navigate = useNavigate();
   const { isDarkMode, toggleTheme } = useTheme();
 
   const token = localStorage.getItem('token');
-  const user = JSON.parse(localStorage.getItem('user') || '{}');
 
   const fetchTodos = useCallback(async () => {
     if (!token) return;
@@ -32,10 +27,6 @@ function Todo() {
     } catch (err) {
       setError('Failed to fetch tasks');
       console.error(err);
-    }
-  }, [token]);
-    } catch (err) {
-      console.error('Failed to fetch todos:', err);
     }
   }, [token]);
 
@@ -259,6 +250,7 @@ function Todo() {
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   placeholder="Enter task name"
+                  autoComplete="off"
                   className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors duration-200 ${
                     isDarkMode 
                       ? 'border-gray-600 bg-gray-700 text-gray-100 placeholder-gray-400' 
@@ -304,6 +296,7 @@ function Todo() {
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
                 placeholder="What needs to be done?"
+                autoComplete="off"
                 className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors duration-200 ${
                   isDarkMode 
                     ? 'border-gray-600 bg-gray-700 text-gray-100 placeholder-gray-400' 
@@ -325,6 +318,7 @@ function Todo() {
                 onChange={(e) => setDescription(e.target.value)}
                 placeholder="Add detailed description of the task..."
                 rows={4}
+                autoComplete="off"
                 className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors duration-200 resize-none ${
                   isDarkMode 
                     ? 'border-gray-600 bg-gray-700 text-gray-100 placeholder-gray-400' 

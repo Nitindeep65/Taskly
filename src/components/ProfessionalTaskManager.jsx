@@ -43,7 +43,7 @@ function ProfessionalTaskManager() {
     setError('');
 
     try {
-      const response = await axios.post('https://taskly-backend-iutv.onrender.com/todo/addTodo', {
+      const response = await axios.post('https://taskly-backend-iutv.onrender.com/todo/createTodo', {
         name: name.trim(),
         title: title.trim(),
         description: description.trim(),

@@ -155,7 +155,7 @@ function Dashboard() {
     setAddingTodo(true);
     try {
       const res = await axios.post(
-        "https://taskly-backend-iutv.onrender.com/todo/addTodo",
+        "https://taskly-backend-iutv.onrender.com/todo/createTodo",
         {
           title: newTodo,
           status: newTodoStatus,
