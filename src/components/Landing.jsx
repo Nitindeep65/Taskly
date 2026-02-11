@@ -23,13 +23,13 @@ function Landing() {
       `}</style>
       <div className={`min-h-screen transition-colors duration-300 ${
         isDarkMode 
-          ? 'bg-gray-900' 
+          ? 'bg-gray-700' 
           : 'bg-gray-50'
       }`}>
       {/* Navigation Header */}
       <nav className={`border-b sticky top-0 z-50 transition-colors duration-300 backdrop-blur-lg ${
         isDarkMode 
-          ? 'bg-gray-900/95 border-gray-700' 
+          ? 'bg-gray-700/95 border-gray-700' 
           : 'bg-white/95 border-gray-200'
       }`}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
