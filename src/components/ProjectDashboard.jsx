@@ -39,7 +39,7 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 
-const API_URL = "https://taskly-backend-iutv.onrender.com/api";
+const API_URL = "https://taskly-backend-iutv.onrender.com";
 
 function DroppableColumn({ id, children, title, count, color }) {
   const { setNodeRef, isOver } = useDroppable({ id });

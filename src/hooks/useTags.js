@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 
-const API_URL = 'http://localhost:5001';
+const API_URL = 'https://taskly-backend-iutv.onrender.com';
 
 export const useTags = () => {
   const [tags, setTags] = useState([]);
